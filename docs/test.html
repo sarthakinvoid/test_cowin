@@ -57,7 +57,7 @@
   						console.log(data.centers[i])
   						if(data.centers[i].sessions[j].available_capacity > 0){
   							htmlcovishield += `<div class="inside"><div class="capacity">`+data.centers[i].name+`</div>`+	`<div class=capacity> Capacity - `+data.centers[i].sessions[j].available_capacity+`</div>`+`<div>`+data.centers[i].sessions[j].date+`</div></div>`	
-  							if (availableNames.includes(data.centers[i].district_name) == false) availableNames += data.centers[i].district_name +"CV "
+  							if (availableNames.includes(data.centers[i].district_name) == false) availableNames += data.centers[i].district_name + data.centers[i].sessions[j].available_capacity + "CV "
   						}
   						else{
   							htmlcovishield += `<div class="inside"><div>`+data.centers[i].name+`</div>`+	`<div> Capacity - `+data.centers[i].sessions[j].available_capacity+`</div>`+`<div>`+data.centers[i].sessions[j].date+`</div></div>`		
@@ -67,7 +67,7 @@
   						if(data.centers[i].sessions[j].min_age_limit == 18){
 	  						if(data.centers[i].sessions[j].available_capacity > 0){
 	  							htmlnoncovishield += `<div class="inside"><div class="capacity">`+data.centers[i].name+data.centers[i].sessions[j].min_age_limit+`</div>`+	`<div class=capacity> Capacity - `+data.centers[i].sessions[j].available_capacity+`</div>`+`<div>`+data.centers[i].sessions[j].date+`</div></div>`	
-if (availableNames.includes(data.centers[i].district_name) == false) availableNames += data.centers[i].district_name+"CX"	  							
+	  							if (availableNames.includes(data.centers[i].district_name) == false) availableNames += data.centers[i].district_name + data.centers[i].sessions[j].available_capacity + "CX"
 	  						}
 	  						else{
 	  							htmlnoncovishield += `<div class="inside"><div>`+data.centers[i].name+`</div>`+	`<div> Capacity - `+data.centers[i].sessions[j].available_capacity+`</div>`+`<div>`+data.centers[i].sessions[j].date+`</div></div>`		
@@ -85,6 +85,8 @@ if (availableNames.includes(data.centers[i].district_name) == false) availableNa
 	}
 
 	// southDelhi();
+		fetch("188","12-05-2021","gurgaon_data_covishield","gurgaon_data_non_covishield")
+
 	fetch("150","12-05-2021","south_west_delhi_data_covishield","south_west_delhi_data_non_covishield")
 	fetch("149","12-05-2021","south_delhi_data_covishield","south_delhi_data_non_covishield")
 	fetch("144","12-05-2021","south_east_delhi_data_covishield","south_east_delhi_data_non_covishield")
@@ -92,7 +94,6 @@ if (availableNames.includes(data.centers[i].district_name) == false) availableNa
 	fetch("141","12-05-2021","central_delhi_data_covishield","central_delhi_data_non_covishield")
 	fetch("140","12-05-2021","new_delhi_data_covishield","new_delhi_data_non_covishield")
 	fetch("146","12-05-2021","north_delhi_data_covishield","north_delhi_data_non_covishield")
-	fetch("188","12-05-2021","gurgaon_data_covishield","gurgaon_data_non_covishield")
 	setTimeout(function(){ 
 		location.reload(true) 
 
