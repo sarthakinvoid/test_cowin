@@ -38,6 +38,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script type="text/javascript">
 		Notification.permission
+		var availableNames ="";
 	function fetch(distId, date, div1, div2){
 		$.get( "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id="+distId+"&date="+date, function( data ) {
   			// $( "#south_delhi_data" ).html( data );
@@ -56,6 +57,7 @@
   						console.log(data.centers[i])
   						if(data.centers[i].sessions[j].available_capacity > 0){
   							htmlcovishield += `<div class="inside"><div class="capacity">`+data.centers[i].name+`</div>`+	`<div class=capacity> Capacity - `+data.centers[i].sessions[j].available_capacity+`</div>`+`<div>`+data.centers[i].sessions[j].date+`</div></div>`	
+  							if (availableNames.includes(data.centers[i].district_name) == false) availableNames += data.centers[i].district_name +"CV "
   						}
   						else{
   							htmlcovishield += `<div class="inside"><div>`+data.centers[i].name+`</div>`+	`<div> Capacity - `+data.centers[i].sessions[j].available_capacity+`</div>`+`<div>`+data.centers[i].sessions[j].date+`</div></div>`		
@@ -65,6 +67,7 @@
   						if(data.centers[i].sessions[j].min_age_limit == 18){
 	  						if(data.centers[i].sessions[j].available_capacity > 0){
 	  							htmlnoncovishield += `<div class="inside"><div class="capacity">`+data.centers[i].name+data.centers[i].sessions[j].min_age_limit+`</div>`+	`<div class=capacity> Capacity - `+data.centers[i].sessions[j].available_capacity+`</div>`+`<div>`+data.centers[i].sessions[j].date+`</div></div>`	
+if (availableNames.includes(data.centers[i].district_name) == false) availableNames += data.centers[i].district_name+"CX"	  							
 	  						}
 	  						else{
 	  							htmlnoncovishield += `<div class="inside"><div>`+data.centers[i].name+`</div>`+	`<div> Capacity - `+data.centers[i].sessions[j].available_capacity+`</div>`+`<div>`+data.centers[i].sessions[j].date+`</div></div>`		
@@ -75,6 +78,7 @@
   			}
   			document.getElementById(div1).innerHTML = htmlcovishield;
   			document.getElementById(div2).innerHTML = htmlnoncovishield;
+  			var title = "Slots opened";icon = 'https://homepages.cae.wisc.edu/~ece533/images/airplane.png';var body = availableNames;var notification = new Notification(title, { body, icon });
   			// document.getElementById("south_delhi_data").innerHTML = JSON.stringify(data)
 
 		});
@@ -88,11 +92,11 @@
 	fetch("141","12-05-2021","central_delhi_data_covishield","central_delhi_data_non_covishield")
 	fetch("140","12-05-2021","new_delhi_data_covishield","new_delhi_data_non_covishield")
 	fetch("146","12-05-2021","north_delhi_data_covishield","north_delhi_data_non_covishield")
-		var title = "JavaScript Jeep";icon = 'https://homepages.cae.wisc.edu/~ece533/images/airplane.png';var body = "It's Your boarding time";var notification = new Notification(title, { body, icon });
+	fetch("188","12-05-2021","gurgaon_data_covishield","gurgaon_data_non_covishield")
 	setTimeout(function(){ 
 		location.reload(true) 
 
-	}, 1200000);
+	}, 30000);
 	Notification.requestPermission().then(function (permission) {    console.log(permission);});
 	</script>
 </head>
@@ -111,6 +115,12 @@
 		<div id ="south_east_delhi_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
 		<p style="font-weight:bold">South East Delhi - COVAXIN & 18+</p>
 		<div id ="south_east_delhi_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
+	</div>
+	<div id="gurgaon">
+		<p style="font-weight:bold">GGN - COVISHIELD & 18+</p>
+		<div id ="gurgaon_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
+		<p style="font-weight:bold">GGN - COVAXIN & 18+</p>
+		<div id ="gurgaon_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
 	</div>
 	<div id="east_delhi">
 		<p style="font-weight:bold">East Delhi - COVISHIELD & 18+</p>
@@ -153,6 +163,7 @@
 		<button class="btn"><a href="#south_west_delhi">South West Delhi</a></button>
 		<button class="btn"><a href="#new_delhi">New Delhi</a></button>
 		<button class="btn"><a href="#north_delhi">North Delhi</a></button>
+		<button class="btn"><a href="#gurgaon">GGN</a></button>
 	</div>
 	
 </div>
