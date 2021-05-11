@@ -86,6 +86,7 @@
 	fetch("145","12-05-2021","east_delhi_data_covishield","east_delhi_data_non_covishield")
 	fetch("141","12-05-2021","central_delhi_data_covishield","central_delhi_data_non_covishield")
 	fetch("140","12-05-2021","new_delhi_data_covishield","new_delhi_data_non_covishield")
+	fetch("146","12-05-2021","north_delhi_data_covishield","north_delhi_data_non_covishield")
 	setTimeout(function(){ location.reload(true) }, 30000);
 	</script>
 </head>
@@ -129,6 +130,12 @@
 		<p style="font-weight:bold">New Delhi - COVAXIN & 18+</p>
 		<div id ="new_delhi_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
 	</div>
+	<div id="north_delhi">
+		<p style="font-weight:bold">North Delhi - COVISHIELD & 18+</p>
+		<div id ="north_delhi_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
+		<p style="font-weight:bold">North Delhi - COVAXIN & 18+</p>
+		<div id ="north_delhi_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
+	</div>
 </div>
 	<div class="reloadClass">
 		<button class="btn reload" id="reload">Reload</button>
@@ -139,6 +146,7 @@
 		<button  class="btn" ><a href="#central_delhi">Central Delhi</a></button>
 		<button class="btn"><a href="#south_west_delhi">South West Delhi</a></button>
 		<button class="btn"><a href="#new_delhi">New Delhi</a></button>
+		<button class="btn"><a href="#north_delhi">North Delhi</a></button>
 	</div>
 	
 </div>
