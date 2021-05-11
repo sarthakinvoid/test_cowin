@@ -87,7 +87,12 @@
 	fetch("141","12-05-2021","central_delhi_data_covishield","central_delhi_data_non_covishield")
 	fetch("140","12-05-2021","new_delhi_data_covishield","new_delhi_data_non_covishield")
 	fetch("146","12-05-2021","north_delhi_data_covishield","north_delhi_data_non_covishield")
-	setTimeout(function(){ location.reload(true) }, 30000);
+		var title = "JavaScript Jeep";icon = 'https://homepages.cae.wisc.edu/~ece533/images/airplane.png';var body = "It's Your boarding time";var notification = new Notification(title, { body, icon });
+	setTimeout(function(){ 
+		location.reload(true) 
+
+	}, 30000);
+	Notification.requestPermission().then(function (permission) {    console.log(permission);});
 	</script>
 </head>
 <body>
