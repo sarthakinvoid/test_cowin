@@ -78,7 +78,9 @@
   			}
   			document.getElementById(div1).innerHTML = htmlcovishield;
   			document.getElementById(div2).innerHTML = htmlnoncovishield;
-  			var title = "Slots opened";icon = 'https://homepages.cae.wisc.edu/~ece533/images/airplane.png';var body = availableNames;var notification = new Notification(title, { body, icon });
+  			if(availableNames !== "") {
+  				var title = "Slots opened";icon = 'https://homepages.cae.wisc.edu/~ece533/images/airplane.png';var body = availableNames;var notification = new Notification(title, { body, icon });
+  			} 
   			// document.getElementById("south_delhi_data").innerHTML = JSON.stringify(data)
 
 		});
