@@ -54,7 +54,7 @@
   				centers.push(data.centers[i].name)
   				for(j=0;j<data.centers[i].sessions.length;j++){
   					if(data.centers[i].sessions[j].min_age_limit == 18 && data.centers[i].sessions[j].vaccine == "COVISHIELD"){
-  						console.log(data.centers[i])
+  						// console.log(data.centers[i])
   						if(data.centers[i].sessions[j].available_capacity > 0){
   							htmlcovishield += `<div class="inside"><div class="capacity">`+data.centers[i].name+`</div>`+	`<div class=capacity> Capacity - `+data.centers[i].sessions[j].available_capacity+`</div>`+`<div>`+data.centers[i].sessions[j].date+`</div></div>`	
   							if (availableNames.includes(data.centers[i].district_name) == false) availableNames += data.centers[i].district_name + data.centers[i].sessions[j].available_capacity + "CV "
@@ -87,15 +87,30 @@
 	}
 
 	// southDelhi();
-		fetch("188","12-05-2021","gurgaon_data_covishield","gurgaon_data_non_covishield")
+	var today = new Date();
 
-	fetch("150","12-05-2021","south_west_delhi_data_covishield","south_west_delhi_data_non_covishield")
-	fetch("149","12-05-2021","south_delhi_data_covishield","south_delhi_data_non_covishield")
-	fetch("144","12-05-2021","south_east_delhi_data_covishield","south_east_delhi_data_non_covishield")
-	fetch("145","12-05-2021","east_delhi_data_covishield","east_delhi_data_non_covishield")
-	fetch("141","12-05-2021","central_delhi_data_covishield","central_delhi_data_non_covishield")
-	fetch("140","12-05-2021","new_delhi_data_covishield","new_delhi_data_non_covishield")
-	fetch("146","12-05-2021","north_delhi_data_covishield","north_delhi_data_non_covishield")
+	var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+  
+	var yyyy = today.getFullYear();
+	if (dd < 10) {
+	    dd = '0' + dd;
+	}
+	if (mm < 10) {
+	    mm = '0' + mm;
+	}
+	var today = dd + '-' + mm + '-' + yyyy;
+	console.log(today)
+		fetch("188",today,"gurgaon_data_covishield","gurgaon_data_non_covishield")
+
+	fetch("150",today,"south_west_delhi_data_covishield","south_west_delhi_data_non_covishield")
+	fetch("149",today,"south_delhi_data_covishield","south_delhi_data_non_covishield")
+	fetch("144",today,"south_east_delhi_data_covishield","south_east_delhi_data_non_covishield")
+	fetch("145",today,"east_delhi_data_covishield","east_delhi_data_non_covishield")
+	fetch("141",today,"central_delhi_data_covishield","central_delhi_data_non_covishield")
+	fetch("140",today,"new_delhi_data_covishield","new_delhi_data_non_covishield")
+	fetch("146",today,"north_delhi_data_covishield","north_delhi_data_non_covishield")
+
 	setTimeout(function(){ 
 		location.reload(true) 
 
