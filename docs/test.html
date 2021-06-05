@@ -13,17 +13,18 @@
 			color:red;
 		}
 		.reloadClass{
-			position:fixed;
+			/*position:fixed;*/
 	/*width:60px;*/
 	/*height:60px;*/
-	top:10px;
-	right:40px;
+	/*top:10px;*/
+	/*right:40px;*/
+	z-index: 100;
 	
 		}
 		.btn{
-			background-color:#0C9;
+			/*background-color:#0C9;*/
 	color:black;
-	border-radius:50px;
+	/*border-radius:50px;*/
 	text-align:center;
 	box-shadow: 2px 2px 3px #999;	
 	font-size: 20px;	
@@ -35,47 +36,127 @@
 }
 		
 	</style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script> -->
+  	    <link  href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-1.12.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script type="text/javascript">
-		Notification.permission
-		var availableNames ="";
-	function fetch(distId, date, div1, div2){
-		$.get( "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id="+distId+"&date="+date, function( data ) {
-  			// $( "#south_delhi_data" ).html( data );
-  			console.log()
-  			var centers=[];
-  			var hostpitalCenters=[];
-  			var nonHospitalCenters=[]
-  			var count=0;
-  			var htmlcovishield = "";
-  			var htmlnoncovishield = "";
-  			for(i=0;i<data.centers.length;i++){
-  				// console.log(data.centers[i])
-  				centers.push(data.centers[i].name)
-  				for(j=0;j<data.centers[i].sessions.length;j++){
-  					if(data.centers[i].sessions[j].min_age_limit == 18 && data.centers[i].sessions[j].vaccine == "COVISHIELD"){
-  						// console.log(data.centers[i])
-  						if(data.centers[i].sessions[j].available_capacity > 0){
-  							htmlcovishield += `<div class="inside"><div class="capacity">`+data.centers[i].name+`</div>`+	`<div class=capacity> Capacity - `+data.centers[i].sessions[j].available_capacity+`</div>`+`<div>`+data.centers[i].sessions[j].date+`</div></div>`	
-  							if (availableNames.includes(data.centers[i].district_name) == false) availableNames += data.centers[i].district_name + data.centers[i].sessions[j].available_capacity + "CV "
-  						}
-  						else{
-  							htmlcovishield += `<div class="inside"><div>`+data.centers[i].name+`</div>`+	`<div> Capacity - `+data.centers[i].sessions[j].available_capacity+`</div>`+`<div>`+data.centers[i].sessions[j].date+`</div></div>`		
-  						}
-  					}
-  					else {
-  						if(data.centers[i].sessions[j].min_age_limit == 18){
+		function init(){
+			$( function() {
+    			$( "#datepicker" ).datepicker({ dateFormat: 'dd-mm-yy' });
+  			} );		
+
+  			Notification.permission
+  			
+  			var today = new Date();
+			var dd = today.getDate();
+		    var mm = today.getMonth() + 1;
+			var yyyy = today.getFullYear();
+			if (dd < 10) {
+			    dd = '0' + dd;
+			}
+			if (mm < 10) {
+			    mm = '0' + mm;
+			}
+
+			var today = dd + '-' + mm + '-' + yyyy;
+			
+
+			var desiredDate = localStorage.getItem("desiredDate") ? localStorage.getItem("desiredDate") : today
+			console.log(desiredDate)
+			// var desiredDate = today;
+			
+			console.log(desiredDate)
+
+			fetch("188",desiredDate,"gurgaon_data_covishield","gurgaon_data_non_covishield")
+			fetch("150",desiredDate,"south_west_delhi_data_covishield","south_west_delhi_data_non_covishield")
+			fetch("149",desiredDate,"south_delhi_data_covishield","south_delhi_data_non_covishield")
+			fetch("144",desiredDate,"south_east_delhi_data_covishield","south_east_delhi_data_non_covishield")
+			fetch("145",desiredDate,"east_delhi_data_covishield","east_delhi_data_non_covishield")
+			fetch("141",desiredDate,"central_delhi_data_covishield","central_delhi_data_non_covishield")
+			fetch("140",desiredDate,"new_delhi_data_covishield","new_delhi_data_non_covishield")
+			fetch("146",desiredDate,"north_delhi_data_covishield","north_delhi_data_non_covishield")
+
+			setTimeout(function(){ 
+				location.reload(true) 
+
+			}, 90000);
+			Notification.requestPermission().then(function (permission) {    console.log(permission);});
+			  $ (function(){
+			  	getDate()
+
+			  }	)
+			  $( function() {
+			    $( "#chooseDate" ).dialog({
+			      autoOpen: false,
+			      show: {
+			        effect: "blind",
+			        duration: 1000
+			      },
+			      hide: {
+			        effect: "explode",
+			        duration: 1000
+			      }
+			    });
+			 
+			    $( "#initDate" ).on( "click", function() {
+			      $( "#chooseDate" ).dialog( "open" );
+			      $("#submitDate").on("click", function(){
+			      	setDate($('#datepicker').val())
+			      })
+			    });
+			  } );
+
+			  $(function(){
+			  	document.getElementById("choosenDate").innerHTML = desiredDate	
+			  })
+		}
+	
+		function setDate(date){
+			localStorage.setItem("desiredDate",date)
+		}
+		function getDate(){
+			$('#datepicker').val(localStorage.getItem("desiredDate")) 
+		}
+		// document.getElementById("choosenDate").innerHTML = desiredDate
+		function fetch(distId, date, div1, div2){
+			var availableNames ="";
+			$.get( "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id="+distId+"&date="+date, function( data ) {
+	  			// $( "#south_delhi_data" ).html( data );
+	  			console.log()
+	  			var centers=[];
+	  			var hostpitalCenters=[];
+	  			var nonHospitalCenters=[]
+	  			var count=0;
+	  			var htmlcovishield = "";
+	  			var htmlnoncovishield = "";
+	  			for(i=0;i<data.centers.length;i++){
+	  				// console.log(data.centers[i])
+	  				centers.push(data.centers[i].name)
+	  				for(j=0;j<data.centers[i].sessions.length;j++){
+	  					if(data.centers[i].sessions[j].min_age_limit == 18 && data.centers[i].sessions[j].vaccine == "COVISHIELD"){
+	  						// console.log(data.centers[i])
 	  						if(data.centers[i].sessions[j].available_capacity > 0){
-	  							htmlnoncovishield += `<div class="inside"><div class="capacity">`+data.centers[i].name+data.centers[i].sessions[j].min_age_limit+`</div>`+	`<div class=capacity> Capacity - `+data.centers[i].sessions[j].available_capacity+`</div>`+`<div>`+data.centers[i].sessions[j].date+`</div></div>`	
-	  							if (availableNames.includes(data.centers[i].district_name) == false) availableNames += data.centers[i].district_name + data.centers[i].sessions[j].available_capacity + "CX"
+	  							htmlcovishield += `<div class="inside"><div class="capacity">`+data.centers[i].name+`</div>`+	`<div class=capacity> Capacity - `+data.centers[i].sessions[j].available_capacity+`</div>`+`<div>`+data.centers[i].sessions[j].date+`</div></div>`	
+	  							if (availableNames.includes(data.centers[i].district_name) == false) availableNames += data.centers[i].district_name + data.centers[i].sessions[j].available_capacity + "CV "
 	  						}
 	  						else{
-	  							htmlnoncovishield += `<div class="inside"><div>`+data.centers[i].name+`</div>`+	`<div> Capacity - `+data.centers[i].sessions[j].available_capacity+`</div>`+`<div>`+data.centers[i].sessions[j].date+`</div></div>`		
+	  							htmlcovishield += `<div class="inside"><div>`+data.centers[i].name+`</div>`+	`<div> Capacity - `+data.centers[i].sessions[j].available_capacity+`</div>`+`<div>`+data.centers[i].sessions[j].date+`</div></div>`		
 	  						}
-	  					}	
-  					}
-  				}
-  			}
+	  					}
+	  					else {
+	  						if(data.centers[i].sessions[j].min_age_limit == 18){
+		  						if(data.centers[i].sessions[j].available_capacity > 0){
+		  							htmlnoncovishield += `<div class="inside"><div class="capacity">`+data.centers[i].name+data.centers[i].sessions[j].min_age_limit+`</div>`+	`<div class=capacity> Capacity - `+data.centers[i].sessions[j].available_capacity+`</div>`+`<div>`+data.centers[i].sessions[j].date+`</div></div>`	
+		  							if (availableNames.includes(data.centers[i].district_name) == false) availableNames += data.centers[i].district_name + data.centers[i].sessions[j].available_capacity + "CX"
+		  						}
+		  						else{
+		  							htmlnoncovishield += `<div class="inside"><div>`+data.centers[i].name+`</div>`+	`<div> Capacity - `+data.centers[i].sessions[j].available_capacity+`</div>`+`<div>`+data.centers[i].sessions[j].date+`</div></div>`		
+		  						}
+		  					}	
+	  					}
+	  				}
+	  			}
   			document.getElementById(div1).innerHTML = htmlcovishield;
   			document.getElementById(div2).innerHTML = htmlnoncovishield;
   			if(availableNames !== "") {
@@ -87,104 +168,86 @@
 	}
 
 	// southDelhi();
-	var today = new Date();
-
-	var dd = today.getDate();
-    var mm = today.getMonth() + 1;
-  
-	var yyyy = today.getFullYear();
-	if (dd < 10) {
-	    dd = '0' + dd;
-	}
-	if (mm < 10) {
-	    mm = '0' + mm;
-	}
-	var today = dd + '-' + mm + '-' + yyyy;
-	console.log(today)
-		fetch("188",today,"gurgaon_data_covishield","gurgaon_data_non_covishield")
-
-	fetch("150",today,"south_west_delhi_data_covishield","south_west_delhi_data_non_covishield")
-	fetch("149",today,"south_delhi_data_covishield","south_delhi_data_non_covishield")
-	fetch("144",today,"south_east_delhi_data_covishield","south_east_delhi_data_non_covishield")
-	fetch("145",today,"east_delhi_data_covishield","east_delhi_data_non_covishield")
-	fetch("141",today,"central_delhi_data_covishield","central_delhi_data_non_covishield")
-	fetch("140",today,"new_delhi_data_covishield","new_delhi_data_non_covishield")
-	fetch("146",today,"north_delhi_data_covishield","north_delhi_data_non_covishield")
-
-	setTimeout(function(){ 
-		location.reload(true) 
-
-	}, 90000);
-	Notification.requestPermission().then(function (permission) {    console.log(permission);});
+	init()
 	</script>
 </head>
 <body>
-<div style="position: relative;">
-<div>
-	<p id="currentDate"></p>
-	<div id="south_delhi">
-		<p style="font-weight:bold">South Delhi - COVISHIELD & 18+</p>
-		<div id ="south_delhi_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
-		<p style="font-weight:bold">South Delhi - COVAXIN & 18+</p>
-		<div id ="south_delhi_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
+	<div>
+		<div class="reloadClass">
+			<div class="btn"> Slots for 7 days from <span id="choosenDate"></span><button id="initDate" class="btn">Choose date</button>
+			</div>
+			<div style="display:none" id="chooseDate">
+				<p>Date: <input type="text" id="datepicker"></p>
+				<button id="submitDate"><a href="javascript:$('#datepicker').val() ? location.reload(true) : void(0)">Save</a></button>
+			</div>
+
+			<button class="btn reload" id="reload">Reload</button>
+			<button  class="btn" ><a target ="_blank" href="https://selfregistration.cowin.gov.in/">Book</a></button>
+			<button  class="btn" ><a href="#south_delhi">South Delhi</a></button>
+			<button  class="btn" ><a href="#south_east_delhi">South east Delhi</a></button>
+			<button  class="btn" ><a href="#east_delhi">East Delhi</a></button>
+			<button  class="btn" ><a href="#central_delhi">Central Delhi</a></button>
+			<button class="btn"><a href="#south_west_delhi">South West Delhi</a></button>
+			<button class="btn"><a href="#new_delhi">New Delhi</a></button>
+			<button class="btn"><a href="#north_delhi">North Delhi</a></button>
+			<button class="btn"><a href="#gurgaon">GGN</a></button>
+
+		</div>
+		
+		<div style="position: relative; top:3em">
+		<div>
+			<p id="currentDate"></p>
+			<div id="south_delhi">
+				<p style="font-weight:bold">South Delhi - COVISHIELD & 18+</p>
+				<div id ="south_delhi_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
+				<p style="font-weight:bold">South Delhi - COVAXIN & 18+</p>
+				<div id ="south_delhi_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
+			</div>
+			<div id="south_east_delhi">
+				<p style="font-weight:bold">South East Delhi - COVISHIELD & 18+</p>
+				<div id ="south_east_delhi_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
+				<p style="font-weight:bold">South East Delhi - COVAXIN & 18+</p>
+				<div id ="south_east_delhi_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
+			</div>
+			<div id="gurgaon">
+				<p style="font-weight:bold">GGN - COVISHIELD & 18+</p>
+				<div id ="gurgaon_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
+				<p style="font-weight:bold">GGN - COVAXIN & 18+</p>
+				<div id ="gurgaon_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
+			</div>
+			<div id="east_delhi">
+				<p style="font-weight:bold">East Delhi - COVISHIELD & 18+</p>
+				<div id ="east_delhi_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
+				<p style="font-weight:bold">East Delhi - COVAXIN & 18+</p>
+				<div id ="east_delhi_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
+			</div>
+			<div id="central_delhi">
+				<p style="font-weight:bold">central Delhi - COVISHIELD & 18+</p>
+				<div id ="central_delhi_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
+				<p style="font-weight:bold">central Delhi - COVAXIN & 18+</p>
+				<div id ="central_delhi_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
+			</div>
+			<div id="south_west_delhi">
+				<p style="font-weight:bold">south west Delhi - COVISHIELD & 18+</p>
+				<div id ="south_west_delhi_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
+				<p style="font-weight:bold">south west Delhi - COVAXIN & 18+</p>
+				<div id ="south_west_delhi_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
+			</div>
+			<div id="new_delhi">
+				<p style="font-weight:bold">New Delhi - COVISHIELD & 18+</p>
+				<div id ="new_delhi_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
+				<p style="font-weight:bold">New Delhi - COVAXIN & 18+</p>
+				<div id ="new_delhi_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
+			</div>
+			<div id="north_delhi">
+				<p style="font-weight:bold">North Delhi - COVISHIELD & 18+</p>
+				<div id ="north_delhi_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
+				<p style="font-weight:bold">North Delhi - COVAXIN & 18+</p>
+				<div id ="north_delhi_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
+			</div>
+		</div>
+		</div>
 	</div>
-	<div id="south_east_delhi">
-		<p style="font-weight:bold">South East Delhi - COVISHIELD & 18+</p>
-		<div id ="south_east_delhi_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
-		<p style="font-weight:bold">South East Delhi - COVAXIN & 18+</p>
-		<div id ="south_east_delhi_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
-	</div>
-	<div id="gurgaon">
-		<p style="font-weight:bold">GGN - COVISHIELD & 18+</p>
-		<div id ="gurgaon_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
-		<p style="font-weight:bold">GGN - COVAXIN & 18+</p>
-		<div id ="gurgaon_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
-	</div>
-	<div id="east_delhi">
-		<p style="font-weight:bold">East Delhi - COVISHIELD & 18+</p>
-		<div id ="east_delhi_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
-		<p style="font-weight:bold">East Delhi - COVAXIN & 18+</p>
-		<div id ="east_delhi_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
-	</div>
-	<div id="central_delhi">
-		<p style="font-weight:bold">central Delhi - COVISHIELD & 18+</p>
-		<div id ="central_delhi_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
-		<p style="font-weight:bold">central Delhi - COVAXIN & 18+</p>
-		<div id ="central_delhi_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
-	</div>
-	<div id="south_west_delhi">
-		<p style="font-weight:bold">south west Delhi - COVISHIELD & 18+</p>
-		<div id ="south_west_delhi_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
-		<p style="font-weight:bold">south west Delhi - COVAXIN & 18+</p>
-		<div id ="south_west_delhi_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
-	</div>
-	<div id="new_delhi">
-		<p style="font-weight:bold">New Delhi - COVISHIELD & 18+</p>
-		<div id ="new_delhi_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
-		<p style="font-weight:bold">New Delhi - COVAXIN & 18+</p>
-		<div id ="new_delhi_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
-	</div>
-	<div id="north_delhi">
-		<p style="font-weight:bold">North Delhi - COVISHIELD & 18+</p>
-		<div id ="north_delhi_data_covishield" style="display:flex; flex-wrap: wrap">None</div>
-		<p style="font-weight:bold">North Delhi - COVAXIN & 18+</p>
-		<div id ="north_delhi_data_non_covishield" style="display: flex; flex-wrap: wrap">None</div>
-	</div>
-</div>
-	<div class="reloadClass">
-		<button class="btn reload" id="reload">Reload</button>
-		<button  class="btn" ><a target ="_blank" href="https://selfregistration.cowin.gov.in/">Book</a></button>
-		<button  class="btn" ><a href="#south_delhi">South Delhi</a></button>
-		<button  class="btn" ><a href="#south_east_delhi">South east Delhi</a></button>
-		<button  class="btn" ><a href="#east_delhi">East Delhi</a></button>
-		<button  class="btn" ><a href="#central_delhi">Central Delhi</a></button>
-		<button class="btn"><a href="#south_west_delhi">South West Delhi</a></button>
-		<button class="btn"><a href="#new_delhi">New Delhi</a></button>
-		<button class="btn"><a href="#north_delhi">North Delhi</a></button>
-		<button class="btn"><a href="#gurgaon">GGN</a></button>
-	</div>
-	
-</div>
 </body>
 <script type="text/javascript">
 	$('.reload').on("click", function(){
